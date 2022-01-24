@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Pichau/AndroidStudioProjects/UberCl/app/src/main/res/layout/activity_cadastro.xml" value="0.33" />
+        <entry key="..\:/Users/Pichau/AndroidStudioProjects/UberCl/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/Users/Pichau/AndroidStudioProjects/UberCl/app/src/main/res/layout/activity_main.xml" value="0.33" />
       </map>
     </option>

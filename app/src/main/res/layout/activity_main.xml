@@ -32,22 +32,24 @@
 
         <Button
             android:id="@+id/button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="4dp"
             android:layout_weight="1"
             android:background="@color/btn_login"
+            android:onClick="abrirTelaLogin"
             android:text="Entrar"
             android:textColor="@color/white" />
 
         <Button
             android:id="@+id/button2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
             android:layout_weight="1"
             android:background="@color/btn_cadastro"
+            android:onClick="abrirTelaCadastro"
             android:text="Cadastrar"
-            android:textColor="ee" />
+            android:textColor="@color/white" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

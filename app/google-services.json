@@ -301,6 +301,43 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303343416512:android:6c39c1bf3c5fc801d12925",
+        "android_client_info": {
+          "package_name": "com.udemy.ubercl"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "303343416512-2fcce2iv6njmodabv3k23fms0t6kjlg3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.udemy.ubercl",
+            "certificate_hash": "3455ababbce0ec10704018380e106dd37897f744"
+          }
+        },
+        {
+          "client_id": "303343416512-qif65etjmkcjdsh5flkvphf4mknh8ged.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWikuf_wJpxuQXELmpZUxem-FxjFrAnpA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "303343416512-qif65etjmkcjdsh5flkvphf4mknh8ged.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
