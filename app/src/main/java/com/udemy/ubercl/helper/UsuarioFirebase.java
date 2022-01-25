@@ -1,5 +1,7 @@
 package com.udemy.ubercl.helper;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,7 +11,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import com.udemy.ubercl.activity.MapsActivity;
+import com.udemy.ubercl.activity.RequisicoesActivity;
 import com.udemy.ubercl.config.ConfiguracaoFirebase;
+import com.udemy.ubercl.model.Usuario;
 
 public class UsuarioFirebase {
     
@@ -42,6 +51,43 @@ public class UsuarioFirebase {
             return false;
         }
         
+    }
+
+    public static void redirecionaUsuarioLogado(Activity activity){
+
+        FirebaseUser user = getUsuarioAtual();
+        if (user != null){
+
+            DatabaseReference usuariosRef = ConfiguracaoFirebase.getFirebaseDatabase()
+                    .child("usuarios")
+                    .child(getIdentificadorUsuario());
+            usuariosRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                    Usuario usuario = snapshot.getValue(Usuario.class);
+
+                    String tipoUsuario = usuario.getTipo();
+                    if (tipoUsuario.equals("M")){
+                        activity.startActivity(new Intent(activity, RequisicoesActivity.class));
+                    }else{
+                        activity.startActivity(new Intent(activity, MapsActivity.class));
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+        }
+
+    }
+
+    public static String getIdentificadorUsuario(){
+        return getUsuarioAtual().getUid();
     }
     
 }

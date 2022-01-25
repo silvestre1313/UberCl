@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.udemy.ubercl.R;
+import com.udemy.ubercl.helper.UsuarioFirebase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,4 +28,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, CadastroActivity.class));
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        UsuarioFirebase.redirecionaUsuarioLogado(MainActivity.this);
+    }
 }
