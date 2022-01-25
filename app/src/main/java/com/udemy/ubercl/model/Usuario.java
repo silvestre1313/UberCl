@@ -1,5 +1,9 @@
 package com.udemy.ubercl.model;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+import com.udemy.ubercl.config.ConfiguracaoFirebase;
+
 public class Usuario {
 
     private String idUsuario;
@@ -9,6 +13,15 @@ public class Usuario {
     private String tipo;
 
     public Usuario() {
+    }
+
+    public void salvar(){
+
+        DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
+        DatabaseReference usuarios = firebaseRef.child("usuarios").child(getIdUsuario());
+
+        usuarios.setValue(this);
+
     }
 
     public String getIdUsuario() {
@@ -35,6 +48,7 @@ public class Usuario {
         this.email = email;
     }
 
+    @Exclude
     public String getSenha() {
         return senha;
     }

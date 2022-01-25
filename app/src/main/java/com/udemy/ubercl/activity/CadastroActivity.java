@@ -3,6 +3,7 @@ package com.udemy.ubercl.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Switch;
@@ -13,8 +14,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.udemy.ubercl.R;
 import com.udemy.ubercl.config.ConfiguracaoFirebase;
+import com.udemy.ubercl.helper.UsuarioFirebase;
 import com.udemy.ubercl.model.Usuario;
 
 public class CadastroActivity extends AppCompatActivity {
@@ -74,15 +79,52 @@ public class CadastroActivity extends AppCompatActivity {
         autenticacao.createUserWithEmailAndPassword(
                 usuario.getEmail(),
                 usuario.getSenha()
-        ).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
+        ).addOnCompleteListener(this, task -> {
 
-                if (task.isSuccessful()){
-                    Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar usuario", Toast.LENGTH_SHORT).show();
+            if (task.isSuccessful()){
+
+                try {
+
+                    String idUsuario = task.getResult().getUser().getUid();
+                    usuario.setIdUsuario(idUsuario);
+                    usuario.salvar();
+
+                    //Atualizar nome no userProfile
+                    UsuarioFirebase.atualizarNomeUsuario(usuario.getNome());
+
+                    if (verificaTipoUsuario() == "p"){
+                        startActivity(new Intent(CadastroActivity.this, MapsActivity.class));
+                        finish();
+
+                        Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar passageiro", Toast.LENGTH_SHORT).show();
+
+                    }else{
+                        startActivity(new Intent(CadastroActivity.this, RequisicoesActivity.class));
+                        finish();
+
+                        Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar motorista", Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (Exception e){
+                    e.printStackTrace();
                 }
 
+            } else{
+                String excecao = "";
+                try {
+                    throw task.getException();
+                } catch (FirebaseAuthWeakPasswordException e){
+                    excecao = "Digite uma senha mais forte!";
+                } catch (FirebaseAuthInvalidCredentialsException e){
+                    excecao = "Por favor, digite um email valido";
+                } catch (FirebaseAuthUserCollisionException e){
+                    excecao = "Esta conta ja foi cadastrada";
+                } catch (Exception e){
+                    excecao = "Erro ao cadastrar usuario: " + e.getMessage();
+                    e.printStackTrace();
+                }
             }
+
         });
 
     }
