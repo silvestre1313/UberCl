@@ -69,8 +69,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 UsuarioFirebase.redirecionaUsuarioLogado(LoginActivity.this);
 
-                startActivity(new Intent());
-
             }else{
 
                 String excecao = "";
