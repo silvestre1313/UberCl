@@ -23,7 +23,8 @@
             android:theme="@style/Theme.UberCl.NoActionBar" />
         <activity
             android:name=".activity.RequisicoesActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.UberCl.NoActionBar"/>
         <activity
             android:name=".activity.CadastroActivity"
             android:exported="false"
