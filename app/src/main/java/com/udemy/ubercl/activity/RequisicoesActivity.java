@@ -3,12 +3,14 @@ package com.udemy.ubercl.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.SupportMapFragment;
@@ -19,8 +21,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.udemy.ubercl.R;
+import com.udemy.ubercl.adapter.RequisicoesAdapter;
 import com.udemy.ubercl.config.ConfiguracaoFirebase;
+import com.udemy.ubercl.helper.UsuarioFirebase;
 import com.udemy.ubercl.model.Requisicao;
+import com.udemy.ubercl.model.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +37,8 @@ public class RequisicoesActivity extends AppCompatActivity {
     private FirebaseAuth autenticacao;
     private DatabaseReference firebaseRef;
     private List<Requisicao> listaRequisiscoes = new ArrayList<>();
+    private RequisicoesAdapter adapter;
+    private Usuario motorista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +79,16 @@ public class RequisicoesActivity extends AppCompatActivity {
         textResultado = findViewById(R.id.textResultado);
 
         //Configurações inicias
+        motorista = UsuarioFirebase.getDadosUsuarioLogado();
         firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+
+        //Configurar recycler view
+        adapter = new RequisicoesAdapter(getApplicationContext(), listaRequisiscoes, motorista);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerRequisicoes.setLayoutManager(layoutManager);
+        recyclerRequisicoes.setHasFixedSize(true);
+        recyclerRequisicoes.setAdapter(adapter);
 
         recuperarRequisicoes();
 
@@ -100,6 +115,8 @@ public class RequisicoesActivity extends AppCompatActivity {
                     Requisicao requisicao = ds.getValue(Requisicao.class);
                     listaRequisiscoes.add(requisicao);
                 }
+
+                adapter.notifyDataSetChanged();
 
             }
 
