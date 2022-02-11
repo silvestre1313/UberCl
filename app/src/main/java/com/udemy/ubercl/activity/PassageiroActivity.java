@@ -66,14 +66,13 @@ public class PassageiroActivity extends AppCompatActivity
     private FirebaseAuth autenticacao;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private LatLng localPassageiro;
     private EditText editDestino;
     private LinearLayout linearLayoutDestino;
     private Button buttonChamarUber;
     private boolean uberChamado;
     private DatabaseReference firebaseRef;
     private Requisicao requisicao;
-
-    private LatLng localPassageiro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -270,7 +269,7 @@ public class PassageiroActivity extends AppCompatActivity
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    1000,
+                    10000,
                     10,
                     locationListener
             );

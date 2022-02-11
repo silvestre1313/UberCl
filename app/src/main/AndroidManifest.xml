@@ -17,6 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UberCl">
         <activity
+            android:name=".activity.CorridaActivity"
+            android:exported="false"
+            android:theme="@style/Theme.UberCl.NoActionBar"
+            android:parentActivityName=".activity.RequisicoesActivity"/>
+        <activity
             android:name=".activity.PassageiroActivity"
             android:exported="false"
             android:label="@string/title_activity_passageiro"
@@ -24,7 +29,7 @@
         <activity
             android:name=".activity.RequisicoesActivity"
             android:exported="false"
-            android:theme="@style/Theme.UberCl.NoActionBar"/>
+            android:theme="@style/Theme.UberCl.NoActionBar" />
         <activity
             android:name=".activity.CadastroActivity"
             android:exported="false"
