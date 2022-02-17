@@ -122,6 +122,14 @@ public class CorridaActivity extends AppCompatActivity
 
     private void requisicaoAguardando(){
         buttonAceitarCorrida.setText("Aceitar corrida");
+
+        //Exibe marcador do motorista
+        adicionarMarcadorMotorista(localMotorista, motorista.getNome());
+
+        mMap.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(localMotorista, 20)
+        );
+
     }
 
     private void requisicaoACaminho(){
@@ -215,6 +223,9 @@ public class CorridaActivity extends AppCompatActivity
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
                 localMotorista = new LatLng(latitude, longitude);
+
+                //atualizar geofire
+                UsuarioFirebase.atualizarDadosLocalizacao(latitude, longitude);
 
                 alteraInterfaceStatusRequisicao(statusRequisicao);
 

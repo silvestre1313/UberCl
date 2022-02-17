@@ -62,6 +62,15 @@ import java.util.Locale;
 public class PassageiroActivity extends AppCompatActivity
         implements OnMapReadyCallback {
 
+    /*
+    * lat/lon destino: (rua otavio tarquino, 881)
+    * lat/lon passageiro -23.562791,-46.654668
+    * lat/lon motorista (a caminho):
+    *   inicial: -23.563196, -46.650607
+    *   intermediaria: -23.564801, -46.652196
+    *   final: -23.563136, -46.654247
+    * */
+
     private GoogleMap mMap;
     private FirebaseAuth autenticacao;
     private LocationManager locationManager;
@@ -250,6 +259,9 @@ public class PassageiroActivity extends AppCompatActivity
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
                 localPassageiro = new LatLng(latitude, longitude);
+
+                //atualizar geofire
+                UsuarioFirebase.atualizarDadosLocalizacao(latitude, longitude);
 
                 mMap.clear();
                 mMap.addMarker(
