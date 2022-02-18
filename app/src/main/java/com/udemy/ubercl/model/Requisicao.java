@@ -49,6 +49,20 @@ public class Requisicao {
 
     }
 
+    public void atualizarStatus(){
+
+        DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
+        DatabaseReference requisicoes = firebaseRef.child("requisicoes");
+
+        DatabaseReference requisicao = requisicoes.child(getId());
+
+        Map objeto = new HashMap();
+        objeto.put("status", getStatus());
+
+        requisicao.updateChildren(objeto);
+
+    }
+
     public String getId() {
         return id;
     }
