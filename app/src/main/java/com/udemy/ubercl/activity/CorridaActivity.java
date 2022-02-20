@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,6 +63,7 @@ public class CorridaActivity extends AppCompatActivity
     private Marker marcadorPassageiro;
     private String statusRequisicao;
     private boolean requisicaoAtiva;
+    private FloatingActionButton fabRota;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +144,7 @@ public class CorridaActivity extends AppCompatActivity
 
     private void requisicaoACaminho(){
         buttonAceitarCorrida.setText("A caminho do passageiro");
+        fabRota.setVisibility(View.VISIBLE);
 
         //Exibe marcador do motorista
         adicionarMarcadorMotorista(localMotorista, motorista.getNome());
@@ -311,6 +315,7 @@ public class CorridaActivity extends AppCompatActivity
     private void inicializarComponentes(){
 
         buttonAceitarCorrida = findViewById(R.id.buttonAceitarCorrida);
+        fabRota = findViewById(R.id.fabRota);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -323,6 +328,39 @@ public class CorridaActivity extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        fabRota.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String status = statusRequisicao;
+                if (status != null && !status.isEmpty()){
+
+                    String lat = "";
+                    String lon = "";
+
+                    switch (status){
+                        case Requisicao.STATUS_A_CAMINHO:
+                            lat = String.valueOf(localPassageiro.latitude);
+                            lon = String.valueOf(localPassageiro.longitude);
+                            break;
+                        case Requisicao.STATUS_VIAGEM:
+                           // lat = String.valueOf();
+                           // lon = String.valueOf();
+                            break;
+                    }
+
+                    //abrir rota
+                    String latLong = lat + "," + lon;
+                    Uri uri = Uri.parse("google.navigation:q="+latLong+"&mode=d");
+                    Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                    i.setPackage("com.google.android.apps.maps");
+                    startActivity(i);
+
+                }
+
+            }
+        });
 
     }
 
