@@ -42,6 +42,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.udemy.ubercl.R;
 import com.udemy.ubercl.config.ConfiguracaoFirebase;
 import com.udemy.ubercl.helper.UsuarioFirebase;
+import com.udemy.ubercl.model.Destino;
 import com.udemy.ubercl.model.Requisicao;
 import com.udemy.ubercl.model.Usuario;
 
@@ -61,9 +62,11 @@ public class CorridaActivity extends AppCompatActivity
     private Button buttonAceitarCorrida;
     private Marker marcadorMotorista;
     private Marker marcadorPassageiro;
+    private Marker marcadorDestino;
     private String statusRequisicao;
     private boolean requisicaoAtiva;
     private FloatingActionButton fabRota;
+    private Destino destino;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +106,7 @@ public class CorridaActivity extends AppCompatActivity
                             Double.parseDouble(passageiro.getLongitude())
                     );
                     statusRequisicao = requisicao.getStatus();
+                    destino = requisicao.getDestino();
                     alteraInterfaceStatusRequisicao(statusRequisicao);
 
                 }
@@ -125,6 +129,9 @@ public class CorridaActivity extends AppCompatActivity
                 break;
             case Requisicao.STATUS_A_CAMINHO:
                 requisicaoACaminho();
+                break;
+            case Requisicao.STATUS_VIAGEM:
+                requisicaoViagem();
                 break;
         }
 
@@ -155,6 +162,21 @@ public class CorridaActivity extends AppCompatActivity
         centralizarDoisMarcadores(marcadorMotorista, marcadorPassageiro);
 
         iniciarMonitoramentoCorrida(passageiro, motorista);
+
+    }
+
+    private void requisicaoViagem(){
+
+        fabRota.setVisibility(View.VISIBLE);
+        buttonAceitarCorrida.setText("A caminho do destino");
+
+        adicionarMarcadorMotorista(localMotorista, motorista.getNome());
+        LatLng localDestino = new LatLng(
+                Double.parseDouble(destino.getLatitude()),
+                Double.parseDouble(destino.getLongitude())
+        );
+        adicionarMarcadorDestino(localDestino, "Destino");
+        centralizarDoisMarcadores(marcadorMotorista, marcadorDestino);
 
     }
 
@@ -260,6 +282,24 @@ public class CorridaActivity extends AppCompatActivity
 
     }
 
+    private void adicionarMarcadorDestino(LatLng localizacao, String titulo){
+
+        if (marcadorPassageiro != null){
+            marcadorPassageiro.remove();
+        }
+
+        if (marcadorDestino != null){
+            marcadorDestino.remove();
+        }
+        marcadorDestino = mMap.addMarker(
+                new MarkerOptions()
+                        .position(localizacao)
+                        .title(titulo)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.destino))
+        );
+
+    }
+
     public void aceitarCorrida(View view){
 
         requisicao = new Requisicao();
@@ -345,8 +385,8 @@ public class CorridaActivity extends AppCompatActivity
                             lon = String.valueOf(localPassageiro.longitude);
                             break;
                         case Requisicao.STATUS_VIAGEM:
-                           // lat = String.valueOf();
-                           // lon = String.valueOf();
+                            lat = destino.getLatitude();
+                            lon = destino.getLongitude();
                             break;
                     }
 

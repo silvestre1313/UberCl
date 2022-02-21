@@ -93,6 +93,7 @@ public class RequisicoesActivity extends AppCompatActivity {
 
                     if (requisicao.getStatus().equals(Requisicao.STATUS_A_CAMINHO)
                                 || requisicao.getStatus().equals(Requisicao.STATUS_VIAGEM)){
+                        motorista = requisicao.getMotorista();
                         abrirTelaCorrida(requisicao.getId(), motorista, true);
                     }
 
@@ -127,6 +128,7 @@ public class RequisicoesActivity extends AppCompatActivity {
                 if (!latitude.isEmpty() && !longitude.isEmpty()){
                     motorista.setLatitude(latitude);
                     motorista.setLongitude(longitude);
+                    adicionaEvendoCliqueRecyclerView();
                     locationManager.removeUpdates(locationListener);
                     adapter.notifyDataSetChanged();
                 }
@@ -196,7 +198,12 @@ public class RequisicoesActivity extends AppCompatActivity {
         recyclerRequisicoes.setHasFixedSize(true);
         recyclerRequisicoes.setAdapter(adapter);
 
-        //Adicionar evento de clique
+        recuperarRequisicoes();
+
+    }
+
+    private void adicionaEvendoCliqueRecyclerView(){
+
         recyclerRequisicoes.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
                 recyclerRequisicoes,
@@ -218,8 +225,6 @@ public class RequisicoesActivity extends AppCompatActivity {
                     }
                 }
         ));
-
-        recuperarRequisicoes();
 
     }
 
