@@ -161,7 +161,8 @@ public class CorridaActivity extends AppCompatActivity
 
         centralizarDoisMarcadores(marcadorMotorista, marcadorPassageiro);
 
-        iniciarMonitoramentoCorrida(passageiro, motorista);
+        //Inicia monitoramento do motorista para passageiro
+        iniciarMonitoramento(motorista, localPassageiro, Requisicao.STATUS_VIAGEM);
 
     }
 
@@ -178,9 +179,12 @@ public class CorridaActivity extends AppCompatActivity
         adicionarMarcadorDestino(localDestino, "Destino");
         centralizarDoisMarcadores(marcadorMotorista, marcadorDestino);
 
+        //Inicia monitoramento do motorista para destino
+        iniciarMonitoramento(motorista, localDestino, Requisicao.STATUS_FINALIZADA);
+
     }
 
-    private void iniciarMonitoramentoCorrida(Usuario p, Usuario m){
+    private void iniciarMonitoramento(final Usuario uOrigem, LatLng localDestino, final String status){
 
         //Inicializar geofire
         DatabaseReference localUsuario = ConfiguracaoFirebase.getFirebaseDatabase()
@@ -190,21 +194,22 @@ public class CorridaActivity extends AppCompatActivity
         //Adiciona circulo no passageiro
         Circle circulo = mMap.addCircle(
                 new CircleOptions()
-                .center(localPassageiro)
+                .center(localDestino)
                 .radius(50) //em metros
                 .fillColor(Color.argb(90, 255, 153, 0))
                 .strokeColor(Color.argb(190, 255, 152, 0))
         );
 
-        GeoQuery geoQuery = geoFire.queryAtLocation(
-                new GeoLocation(localPassageiro.latitude, localPassageiro.longitude),
+        final GeoQuery geoQuery = geoFire.queryAtLocation(
+                new GeoLocation(localDestino.latitude, localDestino.longitude),
                 0.05//em km
         );
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
-                    if (key.equals(motorista.getIdUsuario())){
-                        requisicao.setStatus(Requisicao.STATUS_VIAGEM);
+                    if (key.equals(uOrigem.getIdUsuario())){
+
+                        requisicao.setStatus(status);
                         requisicao.atualizarStatus();
 
                         geoQuery.removeAllListeners();
