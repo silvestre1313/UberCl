@@ -34,7 +34,7 @@ public class Requisicao {
 
     }
 
-    public void atualizer(){
+    public void atualizar(){
 
         DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
         DatabaseReference requisicoes = firebaseRef.child("requisicoes");

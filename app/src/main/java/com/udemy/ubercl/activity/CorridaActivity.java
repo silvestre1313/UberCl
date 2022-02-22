@@ -41,10 +41,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.udemy.ubercl.R;
 import com.udemy.ubercl.config.ConfiguracaoFirebase;
+import com.udemy.ubercl.helper.Local;
 import com.udemy.ubercl.helper.UsuarioFirebase;
 import com.udemy.ubercl.model.Destino;
 import com.udemy.ubercl.model.Requisicao;
 import com.udemy.ubercl.model.Usuario;
+
+import java.text.DecimalFormat;
 
 public class CorridaActivity extends AppCompatActivity
         implements OnMapReadyCallback {
@@ -143,6 +146,7 @@ public class CorridaActivity extends AppCompatActivity
     private void requisicaoFinalizada(){
 
         fabRota.setVisibility(View.GONE);
+        requisicaoAtiva = false;
 
         if (marcadorMotorista != null){
             marcadorMotorista.remove();
@@ -160,7 +164,13 @@ public class CorridaActivity extends AppCompatActivity
         adicionarMarcadorDestino(localDestino, "Destino");
         centralizarMarcador(localDestino);
 
-        buttonAceitarCorrida.setText("Corrida finalizada - R$ 20");
+        //Calcular distancia
+        float distancia = Local.calcularDistancia(localPassageiro, localDestino);
+        float valor = distancia * 8;
+        DecimalFormat decimal = new DecimalFormat("0.00");
+        String resultado = decimal.format(valor);
+
+        buttonAceitarCorrida.setText("Corrida finalizada - R$ " + resultado);
 
     }
 
@@ -223,7 +233,7 @@ public class CorridaActivity extends AppCompatActivity
         GeoFire geoFire = new GeoFire(localUsuario);
 
         //Adiciona circulo no passageiro
-        Circle circulo = mMap.addCircle(
+        final Circle circulo = mMap.addCircle(
                 new CircleOptions()
                 .center(localDestino)
                 .radius(50) //em metros
@@ -343,7 +353,7 @@ public class CorridaActivity extends AppCompatActivity
         requisicao.setMotorista(motorista);
         requisicao.setStatus(Requisicao.STATUS_A_CAMINHO);
 
-        requisicao.atualizer();
+        requisicao.atualizar();
 
     }
 
